@@ -58,7 +58,10 @@ public class PlayerScript : MonoBehaviour {
             Powerswitch = true;
         }
         //////////////////////////////////////
-
+        if (_hp == 0)
+        {
+            Application.LoadLevel("3");
+        }
         if (Input.GetKeyUp(KeyCode.Q))          //q눌럿을때 포크포크
         {
             var attack_fork = Instantiate(Fork_Set, Vector3.zero, Quaternion.identity) as GameObject;
