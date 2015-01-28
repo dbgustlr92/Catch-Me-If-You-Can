@@ -15,7 +15,8 @@ public class PlayerScript : MonoBehaviour {
     public GameObject _DamageEff;
     public UIFilledSprite _GuageBarWidget;  //체력 게이지
     public UIFilledSprite _PowerGauge;   //파워게이지
-    public GameObject _Set;
+    public GameObject Stone_Set;
+    public GameObject Fork_Set;
    
     public Transform _parent;
     public GameObject Player;
@@ -58,14 +59,21 @@ public class PlayerScript : MonoBehaviour {
         }
         //////////////////////////////////////
 
-
-        if (Input.GetKeyUp(KeyCode.LeftControl))        //왼쪽 컨트롤버튼 눌렀을때 무기발사
+        if (Input.GetKeyUp(KeyCode.Q))          //q눌럿을때 포크포크
         {
-            var attack = Instantiate(_Set, Vector3.zero, Quaternion.identity) as GameObject;
-            attack.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-            attack.transform.localPosition = new Vector3(-1.2f, Player.transform.position.y, 0);
-            attack.transform.parent = _parent;
-            attack.gameObject.GetComponent<MoveFood>().power = _power;
+            var attack_fork = Instantiate(Fork_Set, Vector3.zero, Quaternion.identity) as GameObject;
+            attack_fork.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            attack_fork.transform.localPosition = new Vector3(-1.5f, Player.transform.position.y, 0);
+            attack_fork.transform.parent = _parent;
+            attack_fork.gameObject.GetComponent<MoveFood>().power = _power;
+        }
+        if (Input.GetKeyUp(KeyCode.W))        //w 눌렀을때 무기발사 (쓔레기통)
+        {
+            var attack_Stone = Instantiate(Stone_Set, Vector3.zero, Quaternion.identity) as GameObject;
+            attack_Stone.transform.localScale = new Vector3(1.5f, 2f, 2f);
+            attack_Stone.transform.localPosition = new Vector3(-2f, Player.transform.position.y, 0);
+            attack_Stone.transform.parent = _parent;
+            attack_Stone.gameObject.GetComponent<MoveFood>().power = _power * 5;
             
         }
         
@@ -167,10 +175,12 @@ public class PlayerScript : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
 
-        score = score + 100;
-
-        Destroy(other.gameObject);  // 객체제거
-       
+        
+        if(other.gameObject.name.Equals("비빔밥")){
+            Debug.Log(other.gameObject.name);
+            Destroy(other.gameObject);  // 객체제거
+            score = score + 100;
+        }
         //animation.Play("1_damage");
         
     }
