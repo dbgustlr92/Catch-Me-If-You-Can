@@ -29,6 +29,12 @@ public class PlayerScript : MonoBehaviour {
     public int score;
     public UILabel ScorePanel;
 
+    private bool isable_fork = false;
+    private bool isable_garbagecan = false;
+    private bool isable_stone = false;
+    int ForkCount = 0;
+    int GarbageCanCount = 0;
+    int StoneCount = 0;
     
     void Start()
     {
@@ -67,32 +73,47 @@ public class PlayerScript : MonoBehaviour {
         {
             Application.LoadLevel("3");
         }
-        if (Input.GetKeyUp(KeyCode.Q))          //q눌럿을때 포크포크
-        { 
+        if (Input.GetKeyUp(KeyCode.Q) && isable_fork && ForkCount >0)          //q눌럿을때 포크포크
+        {
+            isable_fork = false;
+            ForkCount--;
             var attack_fork = Instantiate(Fork_Set, Vector3.zero, Quaternion.identity) as GameObject;
             attack_fork.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             attack_fork.transform.localPosition = new Vector3(-1.5f, Player.transform.position.y, 0);
             attack_fork.transform.parent = _parent;
             attack_fork.gameObject.GetComponent<MoveFood>().power = _power;
+
+            if (ForkCount > 0)
+                isable_fork = true;
             
         }
        
         
-        if (Input.GetKeyUp(KeyCode.W))        //w 눌렀을때 무기발사 (쓔레기통)
+        if (Input.GetKeyUp(KeyCode.W) && isable_garbagecan && GarbageCanCount >0)        //w 눌렀을때 무기발사 (쓔레기통)
         {
+            isable_garbagecan = false;
+            GarbageCanCount--;
             var attack_GarbageCan = Instantiate(Garbage_Set, Vector3.zero, Quaternion.identity) as GameObject;
             attack_GarbageCan.transform.localScale = new Vector3(1.5f, 2f, 2f);
             attack_GarbageCan.transform.localPosition = new Vector3(-2f, Player.transform.position.y, 0);
             attack_GarbageCan.transform.parent = _parent;
             attack_GarbageCan.gameObject.GetComponent<MoveFood>().power = _power * 5;
+
+            if (GarbageCanCount > 0)
+                isable_garbagecan = true;
             
         }
-        if (Input.GetKeyUp(KeyCode.E))
+        if (Input.GetKeyUp(KeyCode.E) && isable_stone && StoneCount >0)
         {
+            isable_stone = false;
+            StoneCount--;
             var attack_Stone = Instantiate(Stone_Set, Vector3.zero, Quaternion.identity) as GameObject;
             attack_Stone.transform.localPosition = new Vector3(-2f, Player.transform.position.y, 0);
             attack_Stone.transform.parent = _parent;
             attack_Stone.gameObject.GetComponent<MoveFood>().power = _power * 5;
+
+            if (StoneCount > 0)
+                isable_stone = true;
         }
         
         if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -109,13 +130,13 @@ public class PlayerScript : MonoBehaviour {
         JumpProcess();
         if (Input.GetKeyDown(KeyCode.Space)/*Input.touchCount>0*/)
         {
-            child[3].GetComponent<UISprite>().spriteName = "jump&slide_pushed";
+            child[3].GetComponent<UISprite>().spriteName = "점프버튼_눌림";
             DoJump();
         }
 
         if(Input.GetKeyUp(KeyCode.Space))
         {
-            child[3].GetComponent<UISprite>().spriteName = "점프&슬라이드";
+            child[3].GetComponent<UISprite>().spriteName = "점프버튼";
             
         }
         // y값을 gameObject에 적용하세요.
@@ -126,10 +147,9 @@ public class PlayerScript : MonoBehaviour {
         _hp--;
         _GuageBarWidget.fillAmount = _hp * 0.0005f;
 
-
+        ScorePanel.color = Color.black;
         ScorePanel.text = score.ToString();
-
-  
+        
 
 
        
@@ -197,13 +217,33 @@ public class PlayerScript : MonoBehaviour {
     void OnTriggerEnter(Collider other) {
 
         
-        if(other.gameObject.name.Equals("비빔밥")){
-            Debug.Log(other.gameObject.name);
-            Destroy(other.gameObject);  // 객체제거
+        if(other.gameObject.name.Equals("비빔밥")){        //비빔밥 먹기
+            Destroy(other.gameObject);  
             score = score + 100;
         }
-        //animation.Play("1_damage");
-        
+        else if (other.gameObject.name.Equals("Item_Fork"))      //포크 먹기
+        {
+            Destroy(other.gameObject);
+            if (isable_fork == false)       //포크 던기기 가능하게 변수 바꿈
+                isable_fork = true;     
+            ForkCount++;                    //먹은 포크 개수 증가
+        }
+
+        else if (other.gameObject.name.Equals("Item_GarbageCan"))
+        {
+            Destroy(other.gameObject);
+            if (isable_garbagecan == false)
+                isable_garbagecan = true;
+            GarbageCanCount++;
+        }
+
+        else if (other.gameObject.name.Equals("Item_Stone"))
+        {
+            Destroy(other.gameObject);
+            if (isable_stone == false)
+                isable_stone = true;
+            StoneCount++;
+        }
     }
 }
 

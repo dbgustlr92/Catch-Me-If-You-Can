@@ -57,7 +57,7 @@
      <Compile Include="Assets\3_Script\PlayerScript.cs" />
      <Compile Include="Assets\3_Script\Player_R.cs" />
      <Compile Include="Assets\3_Script\Star_Rotate.cs" />
-     <Compile Include="Assets\3_Script\Touch_Soard.cs" />
+     <Compile Include="Assets\3_Script\Touch_Stage.cs" />
      <Compile Include="Assets\3_Script\score.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipItems.cs" />
      <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipRandomItem.cs" />
