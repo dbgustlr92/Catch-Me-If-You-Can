@@ -35,9 +35,16 @@ public class PlayerScript : MonoBehaviour {
     int ForkCount = 0;
     int GarbageCanCount = 0;
     int StoneCount = 0;
+
+    public GameObject PowerGauge;
+    bool Itemable_Fork = false;
+    bool Itemable_GarbageCan = false;
+    bool Itemable_Stone = false;
+
     
     void Start()
     {
+        PowerGauge.SetActive(false);
         //y = Player.transform.localPosition.y;
         y = y_base;
         
@@ -46,9 +53,7 @@ public class PlayerScript : MonoBehaviour {
     
     void Update()
     {
-        
         UISprite[] child = GameObject.Find("1_BGObj").GetComponentsInChildren<UISprite>();
-        
         /////////파워게이지 자동으로 오르락 내리락 부분
         if (_power > 0 && Powerswitch)
         {
@@ -73,6 +78,14 @@ public class PlayerScript : MonoBehaviour {
         {
             Application.LoadLevel("3");
         }
+
+        if (Input.GetKeyDown(KeyCode.Q) && isable_fork && ForkCount > 0)
+        {
+            PowerGauge.SetActive(true);
+            child[4].GetComponent<UISprite>().spriteName = "btn_fork_pushed";
+            
+
+        }
         if (Input.GetKeyUp(KeyCode.Q) && isable_fork && ForkCount >0)          //q눌럿을때 포크포크
         {
             isable_fork = false;
@@ -82,15 +95,24 @@ public class PlayerScript : MonoBehaviour {
             attack_fork.transform.localPosition = new Vector3(-1.5f, Player.transform.position.y, 0);
             attack_fork.transform.parent = _parent;
             attack_fork.gameObject.GetComponent<MoveFood>().power = _power;
+            PowerGauge.SetActive(false);
+            child[4].GetComponent<UISprite>().spriteName = "btn_fork";
 
             if (ForkCount > 0)
                 isable_fork = true;
             
         }
-       
-        
-        if (Input.GetKeyUp(KeyCode.W) && isable_garbagecan && GarbageCanCount >0)        //w 눌렀을때 무기발사 (쓔레기통)
+
+        if (Input.GetKeyDown(KeyCode.E) && isable_garbagecan && GarbageCanCount > 0)
         {
+            PowerGauge.SetActive(true);
+            child[6].GetComponent<UISprite>().spriteName = "btn_GarbageCan_pushed";
+
+        }
+        if (Input.GetKeyUp(KeyCode.E) && isable_garbagecan && GarbageCanCount >0)        //w 눌렀을때 무기발사 (쓔레기통)
+        {
+            //버튼 눌려잇는거 추가
+            GameObject.Find("Power Gauge").SetActive(true);
             isable_garbagecan = false;
             GarbageCanCount--;
             var attack_GarbageCan = Instantiate(Garbage_Set, Vector3.zero, Quaternion.identity) as GameObject;
@@ -98,26 +120,37 @@ public class PlayerScript : MonoBehaviour {
             attack_GarbageCan.transform.localPosition = new Vector3(-2f, Player.transform.position.y, 0);
             attack_GarbageCan.transform.parent = _parent;
             attack_GarbageCan.gameObject.GetComponent<MoveFood>().power = _power * 5;
-
+            PowerGauge.SetActive(false);
+            child[6].GetComponent<UISprite>().spriteName = "btn_GarbageCan";
             if (GarbageCanCount > 0)
                 isable_garbagecan = true;
             
         }
-        if (Input.GetKeyUp(KeyCode.E) && isable_stone && StoneCount >0)
+
+        if (Input.GetKeyDown(KeyCode.W) && isable_stone && StoneCount > 0 && Itemable_Stone)
         {
+            PowerGauge.SetActive(true);
+            child[5].GetComponent<UISprite>().spriteName = "btn_stone_pushed";
+        }
+        if (Input.GetKeyUp(KeyCode.W) && isable_stone && StoneCount >0 && Itemable_Stone)
+        {
+            //버튼 눌려있는거 추가
+            
             isable_stone = false;
             StoneCount--;
             var attack_Stone = Instantiate(Stone_Set, Vector3.zero, Quaternion.identity) as GameObject;
             attack_Stone.transform.localPosition = new Vector3(-2f, Player.transform.position.y, 0);
             attack_Stone.transform.parent = _parent;
             attack_Stone.gameObject.GetComponent<MoveFood>().power = _power * 5;
-
+            PowerGauge.SetActive(false);
+            child[5].GetComponent<UISprite>().spriteName = "btn_stone";
             if (StoneCount > 0)
                 isable_stone = true;
         }
         
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
+            // 버튼 눌려있는거 추가
             transform.localScale = new Vector3(1f, 0.5f, 1f);
             ((BoxCollider)this.collider).size = new Vector3(100, 50, 200);
         }
@@ -215,7 +248,7 @@ public class PlayerScript : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider other) {
-
+        UISprite[] child = GameObject.Find("1_BGObj").GetComponentsInChildren<UISprite>();
         
         if(other.gameObject.name.Equals("비빔밥")){        //비빔밥 먹기
             Destroy(other.gameObject);  
@@ -223,6 +256,8 @@ public class PlayerScript : MonoBehaviour {
         }
         else if (other.gameObject.name.Equals("Item_Fork"))      //포크 먹기
         {
+            child[4].GetComponent<UISprite>().spriteName = "btn_fork";
+            Itemable_Fork = true;
             Destroy(other.gameObject);
             if (isable_fork == false)       //포크 던기기 가능하게 변수 바꿈
                 isable_fork = true;     
@@ -231,6 +266,8 @@ public class PlayerScript : MonoBehaviour {
 
         else if (other.gameObject.name.Equals("Item_GarbageCan"))
         {
+            child[6].GetComponent<UISprite>().spriteName = "btn_GarbageCan";
+            Itemable_GarbageCan = true;
             Destroy(other.gameObject);
             if (isable_garbagecan == false)
                 isable_garbagecan = true;
@@ -239,6 +276,8 @@ public class PlayerScript : MonoBehaviour {
 
         else if (other.gameObject.name.Equals("Item_Stone"))
         {
+            child[5].GetComponent<UISprite>().spriteName = "btn_stone";
+            Itemable_Stone = true;
             Destroy(other.gameObject);
             if (isable_stone == false)
                 isable_stone = true;
