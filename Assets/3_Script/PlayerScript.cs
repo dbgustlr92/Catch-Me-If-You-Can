@@ -11,7 +11,7 @@ public class PlayerScript : MonoBehaviour {
     const float y_base = -0.11f;      // 캐릭터가 서있는 기준점
     bool jump2 = true;
 
-    public int _hp = 2000;
+    public int _hp = 2500;
     public GameObject _DamageEff;
     public UIFilledSprite _GuageBarWidget;  //체력 게이지
     public UIFilledSprite _PowerGauge;   //파워게이지
@@ -99,7 +99,15 @@ public class PlayerScript : MonoBehaviour {
             child[4].GetComponent<UISprite>().spriteName = "btn_fork";
 
             if (ForkCount > 0)
+            {
                 isable_fork = true;
+                child[4].GetComponent<UISprite>().spriteName = "btn_fork";
+            }
+            else
+            {
+                isable_fork = false;
+                child[4].GetComponent<UISprite>().spriteName = "btn_fork_pushed";
+            }
             
         }
 
@@ -121,9 +129,17 @@ public class PlayerScript : MonoBehaviour {
             attack_GarbageCan.transform.parent = _parent;
             attack_GarbageCan.gameObject.GetComponent<MoveFood>().power = _power * 5;
             PowerGauge.SetActive(false);
-            child[6].GetComponent<UISprite>().spriteName = "btn_GarbageCan";
+
             if (GarbageCanCount > 0)
+            {
                 isable_garbagecan = true;
+                child[6].GetComponent<UISprite>().spriteName = "btn_GarbageCan";
+            }
+            else
+            {
+                isable_garbagecan = false;
+                child[6].GetComponent<UISprite>().spriteName = "btn_GarbageCan_pushed";
+            }
             
         }
 
@@ -143,9 +159,17 @@ public class PlayerScript : MonoBehaviour {
             attack_Stone.transform.parent = _parent;
             attack_Stone.gameObject.GetComponent<MoveFood>().power = _power * 5;
             PowerGauge.SetActive(false);
-            child[5].GetComponent<UISprite>().spriteName = "btn_stone";
+
             if (StoneCount > 0)
+            {
                 isable_stone = true;
+                child[5].GetComponent<UISprite>().spriteName = "btn_stone";
+            }
+            else
+            {
+                isable_stone = false;
+                child[5].GetComponent<UISprite>().spriteName = "btn_stone_pushed";
+            }
         }
         
         if (Input.GetKeyDown(KeyCode.DownArrow))
