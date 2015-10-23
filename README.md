@@ -4,9 +4,9 @@
 <p>This is one of game team projects in <b>"2015 Imagine Cup"</b> and our team name is <b>"All eyes on me".</b></p>
 <p>we passed Korean 1st Round at january.</p>
 
+>><b>Game Screen Shot</b>
 ![Game Screen Shot](Screenshot.jpg "Game ScreenShot")
 
->><b>Game Screen Shot</b>
 
 <h3>Used Skill</h3>
 + Unity3D
