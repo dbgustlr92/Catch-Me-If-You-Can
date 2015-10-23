@@ -1,8 +1,8 @@
 <h1>Catch Me If You Can</h1>
 
-"Catch me if you can" is Runanble smartphone game made by <b>Unity3D.</b>
-This is one of game team projects in <b>"2015 Imagine Cup"</b> and our team name is <b>"All eyes on me".</b>
-we passed Korean 1st Round at january.
+<p>"Catch me if you can" is Runanble smartphone game made by <b>Unity3D.</b></p>
+<p>This is one of game team projects in <b>"2015 Imagine Cup"</b> and our team name is <b>"All eyes on me".</b></p>
+<p>we passed Korean 1st Round at january.</p>
 
 ![Game Screen Shot](Screenshot.jpg "Game ScreenShot")
 
